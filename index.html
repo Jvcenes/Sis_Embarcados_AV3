@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoramento IoT - Temperatura e Umidade</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌡️ Monitoramento IoT</h1>
+            <p class="subtitle">Sistema de Monitoramento de Temperatura e Umidade em Tempo Real</p>
+        </header>
+
+        <div id="loading" class="loading">Carregando dados...</div>
+        <div id="error" class="error" style="display: none;"></div>
+
+        <div id="statsSection" style="display: none;">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>🔥 Dia Mais Quente</h3>
+                    <div class="stat-value hot" id="hotDay">--</div>
+                    <div class="stat-date" id="hotDate">--</div>
+                </div>
+                <div class="stat-card">
+                    <h3>❄️ Dia Mais Frio</h3>
+                    <div class="stat-value cold" id="coldDay">--</div>
+                    <div class="stat-date" id="coldDate">--</div>
+                </div>
+                <div class="stat-card">
+                    <h3>🌡️ Temperatura Média</h3>
+                    <div class="stat-value avgTemperature" id="avgTemp">--</div>
+                </div>
+                <div class="stat-card">
+                    <h3>💧 Dia Mais Úmido</h3>
+                    <div class="stat-value humid" id="humidDay">--</div>
+                    <div class="stat-date" id="humidDate">--</div>
+                </div>
+                <div class="stat-card">
+                    <h3>🌵 Dia Mais Seco</h3>
+                    <div class="stat-value dry" id="dryDay">--</div>
+                    <div class="stat-date" id="dryDate">--</div>
+                </div>
+                <div class="stat-card">
+                    <h3>☁️ Umidade Média</h3>
+                    <div class="stat-value avgHum" id="avgHumidity">--</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="chartsSection" style="display: none;">
+            <div class="charts-section">
+                <div class="day-selector" id="daySelector"></div>
+                
+                <div class="chart-container">
+                    <h3 class="chart-title">📊 Temperatura ao Longo do Dia</h3>
+                    <canvas id="tempChart"></canvas>
+                </div>
+
+                <div class="chart-container">
+                    <h3 class="chart-title">💧 Umidade ao Longo do Dia</h3>
+                    <canvas id="humidityChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
