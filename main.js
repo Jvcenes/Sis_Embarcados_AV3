@@ -52,6 +52,7 @@ function calculateStats(dayData) {
     let totalReadings = 0;
 
     Object.entries(dayData).forEach(([date, readings]) => {
+
         const avgTemp = readings.reduce((s, r) => s + r.temperatura, 0) / readings.length;
         const avgHumidity = readings.reduce((s, r) => s + r.umidade, 0) / readings.length;
 
@@ -67,21 +68,31 @@ function calculateStats(dayData) {
             totalReadings++;
         });
 
-        if (avgTemp > hottestDay.temp) hottestDay = { temp: maxTemp, date, avg: avgTemp };
-        if (avgTemp < coldestDay.temp) coldestDay = { temp: minTemp, date, avg: avgTemp };
+        if (maxTemp > hottestDay.temp)
+            hottestDay = { temp: maxTemp, date, avg: avgTemp };
 
-        if (avgHumidity > mostHumid.humidity) mostHumid = { humidity: maxHumidity, date, avg: avgHumidity };
-        if (avgHumidity < leastHumid.humidity) leastHumid = { humidity: minHumidity, date, avg: avgHumidity };
+        if (minTemp < coldestDay.temp)
+            coldestDay = { temp: minTemp, date, avg: avgTemp };
+
+        if (maxHumidity > mostHumid.humidity)
+            mostHumid = { humidity: maxHumidity, date, avg: avgHumidity };
+
+        if (minHumidity < leastHumid.humidity)
+            leastHumid = { humidity: minHumidity, date, avg: avgHumidity };
     });
 
     const avgTempGlobal = totalTemp / totalReadings;
     const avgHumidityGlobal = totalHumidity / totalReadings;
 
     return {
-        hottestDay, coldestDay, mostHumid, leastHumid, avgTempGlobal, avgHumidityGlobal
+        hottestDay,
+        coldestDay,
+        mostHumid,
+        leastHumid,
+        avgTempGlobal,
+        avgHumidityGlobal
     };
 }
-
 
 function displayStats(stats) {
     document.getElementById('hotDay').textContent = `${stats.hottestDay.temp.toFixed(1)}°C`;
@@ -100,7 +111,6 @@ function displayStats(stats) {
 
     document.getElementById('avgHumidity').textContent = `${stats.avgHumidityGlobal.toFixed(0)}%`;
 }
-
 
 function formatDate(dateStr) {
     const [year, month, day] = dateStr.split('-');
@@ -134,8 +144,9 @@ function selectDay(day) {
 function updateCharts(day) {
     const readings = allData[day];
     const labels = readings.map(r => r.timestamp.split('_')[1].substring(0, 5));
-    const temps = readings.map(r => r.temperatura);
-    const humidity = readings.map(r => r.umidade);
+
+    const temps = readings.map(r => Number(r.temperatura.toFixed(1)));
+    const humidity = readings.map(r => Number(r.umidade.toFixed(1)));
 
     if (tempChart) tempChart.destroy();
     if (humidityChart) humidityChart.destroy();
@@ -191,6 +202,11 @@ function getChartOptions(unit) {
                     color: '#e0e0e0',
                     font: { size: 14 }
                 }
+            },
+            tooltip: {
+                callbacks: {
+                    label: ctx => `${ctx.raw.toFixed(1)}${unit}`
+                }
             }
         },
         scales: {
@@ -209,7 +225,7 @@ function getChartOptions(unit) {
                 ticks: {
                     color: '#999',
                     callback: function(value) {
-                        return value + unit;
+                        return value.toFixed(1) + unit;
                     }
                 }
             }
